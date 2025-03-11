@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participant Registration - ALX Hackathon 2024</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .registration-form {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-group.error input,
+        .form-group.error textarea,
+        .form-group.error select {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .submit-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .team-members {
+            display: none;
+        }
+
+        .team-members.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">
+                    <img src="../images/alx-logo.png" alt="ALX Logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Back to Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form class="registration-form" id="participantForm">
+            <h2>Participant Registration</h2>
+            <p>Join us for an exciting hackathon experience!</p>
+
+            <div class="form-group">
+                <label for="participationType">Participation Type</label>
+                <select id="participationType" name="participationType" required>
+                    <option value="">Select your participation type</option>
+                    <option value="individual">Individual</option>
+                    <option value="team">Team</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="team-members" id="teamMembers">
+                <h3>Team Members</h3>
+                <div class="form-group">
+                    <label for="teamName">Team Name</label>
+                    <input type="text" id="teamName" name="teamName">
+                </div>
+                
+                <div id="memberFields">
+                    <div class="form-group">
+                        <label>Team Member 2</label>
+                        <input type="text" name="teamMember2" placeholder="Full Name">
+                        <input type="email" name="teamMember2Email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label>Team Member 3</label>
+                        <input type="text" name="teamMember3" placeholder="Full Name">
+                        <input type="email" name="teamMember3Email" placeholder="Email">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Skills & Expertise</label>
+                <textarea id="skills" name="skills" placeholder="List your relevant skills and technologies you're comfortable with" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Previous Hackathon Experience</label>
+                <textarea id="experience" name="experience" placeholder="Tell us about your previous hackathon experiences (if any)"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="expectations">What do you hope to learn or achieve from this hackathon?</label>
+                <textarea id="expectations" name="expectations" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="codeOfConduct" required>
+                    I agree to follow the hackathon's code of conduct and rules
+                </label>
+            </div>
+
+            <button type="submit" class="submit-button">Submit Registration</button>
+        </form>
+    </div>
+
+    <script>
+        // Handle team/individual selection
+        const participationType = document.getElementById('participationType');
+        const teamMembers = document.getElementById('teamMembers');
+
+        participationType.addEventListener('change', (e) => {
+            if (e.target.value === 'team') {
+                teamMembers.classList.add('active');
+            } else {
+                teamMembers.classList.remove('active');
+            }
+        });
+
+        // Form validation
+        const form = document.getElementById('participantForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (validateForm(form)) {
+                // Here you would typically send the form data to your server
+                alert('Thank you for registering! We will contact you soon with further details.');
+                form.reset();
+            }
+        });
+
+        function validateForm(form) {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const formGroup = input.closest('.form-group');
+                
+                if (!input.value.trim()) {
+                    formGroup.classList.add('error');
+                    isValid = false;
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            });
+
+            return isValid;
+        }
+    </script>
+</body>
+</html> 
